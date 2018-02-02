@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
+using Commons;
 
 namespace Client
 {
@@ -17,12 +18,12 @@ namespace Client
             FileNameWrite = fileNameWrite;
             FileNameRead = fileNameRead;
         }
-       
+
         public void On()
         {
-            EventWaitHandle wh = new EventWaitHandle(false, EventResetMode.AutoReset, "EventWaitHandle");
-            EventWaitHandle wh1 = new EventWaitHandle(true, EventResetMode.AutoReset, "EventWaitHandle1");
-
+            EventWaitHandle eventWriter = EWHCheck.OpenorCreate(false, EventResetMode.AutoReset, "eventWriter");
+            EventWaitHandle eventReader = EWHCheck.OpenOrWait("eventReader");
+            EventWaitHandle eventRW = EWHCheck.OpenOrWait("eventRW");
             while (true)
             {
                 using (StreamWriter sw = new StreamWriter(FileNameWrite))
@@ -30,18 +31,17 @@ namespace Client
                     string write = Console.ReadLine();
                     sw.WriteLine(write);
                 }
-                wh.Set();
-                wh1.WaitOne();
+                eventWriter.Set();
+                eventRW.WaitOne();
+                eventReader.WaitOne();
                 using (StreamReader sr = new StreamReader(FileNameRead))
                 {
                     Console.WriteLine(sr.ReadLine());
-                    
                 }
-                wh1.Set();
-                wh.WaitOne();
-                
+
+
+
             }
         }
     }
-
 }

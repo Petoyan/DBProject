@@ -11,10 +11,10 @@ namespace Client
     class Program
     {
         static void Main(string[] args)
-        {        
-        WriteRead c = new WriteRead(@"C:\Users\User\Desktop\Baza\Message.txt", @"C:\Users\User\Desktop\Baza\Message1.txt");
-        c.On();
-            
+        {
+            WriteRead c = new WriteRead(@"C:\Users\User\Desktop\Baza\Message.txt", @"C:\Users\User\Desktop\Baza\Message1.txt");
+            c.On();
+
         }
     }
 }

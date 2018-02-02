@@ -13,8 +13,8 @@ namespace Server
 
         static void Main(string[] args)
         {
-         ReadWrite c = new ReadWrite(@"C:\Users\User\Desktop\Baza\Message.txt", @"C:\Users\User\Desktop\Baza\Message1.txt");
-        c.On();
+            ReadWrite c = new ReadWrite(@"C:\Users\User\Desktop\Baza\Message.txt", @"C:\Users\User\Desktop\Baza\Message1.txt");
+            c.On();
         }
     }
 }

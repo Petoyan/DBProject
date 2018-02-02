@@ -5,45 +5,47 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
+using Commons;
 
 namespace Server
 {
     public class ReadWrite
     {
-        
+
         private readonly string FileNameRead;
         private readonly string FileNameWrite;
         public ReadWrite(string fileNameRead, string fileNameWrite)
         {
             FileNameRead = fileNameRead;
             FileNameWrite = fileNameWrite;
-            
+
         }
         Operations op = new Operations();
+
         public void On()
         {
-
-            EventWaitHandle wh = new EventWaitHandle(true, EventResetMode.AutoReset, "EventWaitHandle");
-            EventWaitHandle wh1 = new EventWaitHandle(false, EventResetMode.AutoReset, "EventWaitHandle1");
+            EventWaitHandle eventReader = EWHCheck.OpenorCreate(false, EventResetMode.AutoReset, "eventReader");
+            EventWaitHandle eventRW = EWHCheck.OpenorCreate(false, EventResetMode.AutoReset, "eventRW");
+            EventWaitHandle eventWriter = EWHCheck.OpenOrWait("eventWriter");
             while (true)
             {
                 string str;
                 string line;
-                wh.WaitOne();
+                eventWriter.WaitOne();
                 using (StreamReader sr = new StreamReader(FileNameRead))
                 {
                     line = sr.ReadLine();
-                     str =  op.Check(line);
-                   
+                    str = op.Check(line);
+
                 }
                 using (StreamWriter writer = new StreamWriter(FileNameWrite))
                 {
                     writer.WriteLine(str);
 
                 }
-                wh1.Set();
-                wh1.WaitOne();
-                wh.Set();
+                eventRW.Set();
+                eventReader.Set();
+
             }
         }
     }
