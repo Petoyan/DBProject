@@ -19,7 +19,6 @@ namespace Commons
             }
             catch (WaitHandleCannotBeOpenedException)
             {
-                //Handle does not exist, create it.
                 ewh = new EventWaitHandle(initialState, mode, name);
             }
             return ewh;

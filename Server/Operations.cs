@@ -5,62 +5,92 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Commons;
 
 namespace Server
 {
 
     class Operations
     {
+        public Operations(WriteRead writeRead)
+        {
+            writeRead.OnCheck += Check;
+        }
         private string ServerName = "bot";
-        private string adres;
-        private string f;
-        public string Check(string str)
+        private string adres= @"C:\Users\User\Desktop\Baza\DB\";
+        private List<string> mes;
+        public List<string> Check(object sender, string str)
         {
 
             string[] arr = str.Split(' ');
             if (arr.Length > 4 || arr.Length < 3)
             {
-                return "Your input is wrong";
+                mes = new List<string>();
+                mes.Add("Your input is wrong") ;
             }
-            if (arr[0] == ServerName && (arr[1] == "createdb" || arr[1] == "add" || arr[1] == "get"))
+            else if (arr[0] == ServerName && (arr[1] == "createdb" || arr[1] == "add" || arr[1] == "get"))
             {
 
 
                 if (arr[1] == "createdb")
                 {
-                    adres = @"C:\Users\User\Desktop\Baza\DB\" + arr[2] + ".txt";
-                    using (FileStream fs = File.Create(adres)) 
-                    f = "file created";
+                    using (FileStream fs = File.Create(adres + arr[2] + ".txt"))
+                        mes = new List<string>();
+                    mes.Add("file created");
                 }
                 else if (arr[1] == "add")
-                {                    
-                    Message ms = new Message();
-                    var b = new Message { message = arr[3] };
-                    var writer = new System.Xml.Serialization.XmlSerializer(typeof(Message));
-                    using (var wfile = new StreamWriter(@"C:\Users\User\Desktop\Baza\DB\" + arr[2] + ".txt"))
+                {
+                    var message = new Message<string>();
+                    try
                     {
-                        writer.Serialize(wfile, b);
-                    }              
-                    f = "message  added";
+                        System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(Message<string>));
+                        using (StreamReader file = new StreamReader(adres + arr[2] + ".txt"))
+                        {
+                            Message<string> overview = (Message<string>)reader.Deserialize(file);
+                            message = overview;
+                            message.list.Add(arr[3]);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        message.list.Add(arr[3]);
+                    }
+
+                    var writer = new System.Xml.Serialization.XmlSerializer(typeof(Message<string>));
+                    using (var wfile = new StreamWriter(adres + arr[2] + ".txt"))
+                    {
+                        writer.Serialize(wfile, message);                       
+                    }
+                    mes = new List<string>();
+                    mes.Add("message  added");
                 }
                 else if (arr[1] == "get")
                 {
-
-
-                    System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(Message));
-                    using (StreamReader file = new StreamReader(@"C:\Users\User\Desktop\Baza\DB\" + arr[2] + ".txt"))
+                    try
                     {
-                        Message overview = (Message)reader.Deserialize(file);
-                        f = overview.message;
-                    }
-                }
+                        System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(Message<string>));
+                        using (StreamReader file = new StreamReader(adres + arr[2] + ".txt"))
+                        {
+                            Message<string> overview = (Message<string>)reader.Deserialize(file);
+                            mes = new List<string>();
+                            mes =overview.list;
 
-                return f;
+                        }
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        mes = new List<string>();
+                        mes.Add("FileNotFoundException...........Place create file");
+                    }
+                    
+                }
             }
             else
             {
-                return "Your input is wrong";
+                mes = new List<string>();
+                mes.Add("Your input is wrong");
             }
+            return mes ;
         }
     }
 }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    public  class Message
+    public  class Message<T>
     {
-        public string message;
+        public List<T> list=new List<T>();        
     }
 }

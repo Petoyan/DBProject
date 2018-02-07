@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Commons;
+
 
 namespace Server
 {
@@ -13,8 +15,10 @@ namespace Server
 
         static void Main(string[] args)
         {
-            ReadWrite c = new ReadWrite(@"C:\Users\User\Desktop\Baza\Message.txt", @"C:\Users\User\Desktop\Baza\Message1.txt");
-            c.On();
+            
+            WriteRead c = new WriteRead(@"C:\Users\User\Desktop\Baza\Message1.txt", @"C:\Users\User\Desktop\Baza\Message.txt");
+            Operations op = new Operations(c);
+            c.ReadWrite();
         }
     }
 }

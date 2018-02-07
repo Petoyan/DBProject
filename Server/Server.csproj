@@ -44,7 +44,6 @@
   <ItemGroup>
     <Compile Include="Message.cs" />
     <Compile Include="Operations.cs" />
-    <Compile Include="ReadWrite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Commons;
 
 namespace Client
 {
@@ -12,8 +13,10 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            WriteRead c = new WriteRead(@"C:\Users\User\Desktop\Baza\Message.txt", @"C:\Users\User\Desktop\Baza\Message1.txt");
-            c.On();
+
+            WriteRead writeRead = new WriteRead(@"C:\Users\User\Desktop\Baza\Message.txt", @"C:\Users\User\Desktop\Baza\Message1.txt");
+            writeRead.WriteReade();
+
 
         }
     }
