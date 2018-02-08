@@ -14,10 +14,15 @@ namespace Client
         static void Main(string[] args)
         {
 
-            WriteRead writeRead = new WriteRead(@"C:\Users\User\Desktop\Baza\Message.txt", @"C:\Users\User\Desktop\Baza\Message1.txt");
-            writeRead.WriteReade();
-
-
+            IWriteRead writeRead = new WriteRead(@"C:\Users\User\Desktop\Baza\Message.txt", @"C:\Users\User\Desktop\Baza\Message1.txt");
+            while (true)
+            {
+                foreach (var item in writeRead.WriteReade())
+                {
+                    Console.WriteLine(item);
+                } 
+            }
+           
         }
     }
 }

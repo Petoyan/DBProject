@@ -14,11 +14,14 @@ namespace Server
 
 
         static void Main(string[] args)
-        {
-            
+        {            
             WriteRead c = new WriteRead(@"C:\Users\User\Desktop\Baza\Message1.txt", @"C:\Users\User\Desktop\Baza\Message.txt");
             Operations op = new Operations(c);
-            c.ReadWrite();
+            while (true)
+            {
+                c.ReadWrite();
+            }
+           
         }
     }
 }

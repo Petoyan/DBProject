@@ -7,7 +7,7 @@ using System.Threading;
 namespace Commons
 {
     public delegate List<String> MyDelegat(object obj, string message);
-    public class WriteRead
+    public class WriteRead : IWriteRead
     {
         private event MyDelegat _OnCheck;
         public event MyDelegat OnCheck
@@ -23,20 +23,19 @@ namespace Commons
         }
         private readonly string FileNameRead;
         private readonly string FileNameWrite;
-      
+
         public WriteRead(string fileNameWrite, string fileNameRead)
         {
             FileNameWrite = fileNameWrite;
             FileNameRead = fileNameRead;
         }
 
-        public void WriteReade()
+        public List<string> WriteReade()
         {
             EventWaitHandle eventWriter = EWHCheck.OpenorCreate(false, EventResetMode.AutoReset, "eventWriter");
             EventWaitHandle eventReader = EWHCheck.OpenOrWait("eventReader");
             EventWaitHandle eventRW = EWHCheck.OpenOrWait("eventRW");
-            while (true)
-            {
+            
                 using (StreamWriter sw = new StreamWriter(FileNameWrite))
                 {
                     string write = Console.ReadLine();
@@ -45,31 +44,23 @@ namespace Commons
                 eventWriter.Set();
                 eventRW.WaitOne();
                 eventReader.WaitOne();
-                //using (StreamReader sr = new StreamReader(FileNameRead))
-                //{           
-                //        Console.WriteLine(sr.ReadLine()); 
+
                 System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<string>));
                 using (StreamReader file = new StreamReader(FileNameRead))
                 {
                     List<string> overview = (List<string>)reader.Deserialize(file);
-                                        
-                    foreach (var item in overview)
-                    {
-                        Console.WriteLine(item);
-                    }
-                   
-
+                     return overview;
                 }
-                //}
-            }
+
+                
+            
         }
         public void ReadWrite()
         {
             EventWaitHandle eventReader = EWHCheck.OpenorCreate(false, EventResetMode.AutoReset, "eventReader");
             EventWaitHandle eventRW = EWHCheck.OpenorCreate(false, EventResetMode.AutoReset, "eventRW");
             EventWaitHandle eventWriter = EWHCheck.OpenOrWait("eventWriter");
-            while (true)
-            {
+            
                 List<string> str;
                 string line;
                 eventWriter.WaitOne();
@@ -77,23 +68,15 @@ namespace Commons
                 {
                     line = sr.ReadLine();
                     str = _OnCheck?.Invoke(this, line);
-                    
-
                 }
-                //using (StreamWriter writer = new StreamWriter(FileNameWrite))
-                //{
-                // writer.WriteLine(str);                
-                    var writer = new System.Xml.Serialization.XmlSerializer(typeof(List<string>));
-                    using (var wfile = new StreamWriter(FileNameWrite))
-                    {
-                        writer.Serialize(wfile, str);
-                    }
-
-                //}
+                var writer = new System.Xml.Serialization.XmlSerializer(typeof(List<string>));
+                using (var wfile = new StreamWriter(FileNameWrite))
+                {
+                    writer.Serialize(wfile, str);
+                }
                 eventRW.Set();
                 eventReader.Set();
-
-            }
+            
         }
     }
 }
