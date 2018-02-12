@@ -4,9 +4,8 @@ using System.Text;
 
 namespace Commons
 {
-   public interface IWriteRead
+    public class Message<T>
     {
-         List<string> WriteReade();
-         void ReadWrite();
+        public List<T> list = new List<T>();
     }
 }

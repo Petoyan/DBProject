@@ -7,7 +7,7 @@ using System.Threading;
 namespace Commons
 {
     public delegate List<String> MyDelegat(object obj, string message);
-    public class WriteRead : IWriteRead
+    public class Commit : ICommit
     {
         private event MyDelegat _OnCheck;
         public event MyDelegat OnCheck
@@ -24,13 +24,13 @@ namespace Commons
         private readonly string FileNameRead;
         private readonly string FileNameWrite;
 
-        public WriteRead(string fileNameWrite, string fileNameRead)
+        public Commit(string fileNameWrite, string fileNameRead)
         {
             FileNameWrite = fileNameWrite;
             FileNameRead = fileNameRead;
         }
 
-        public List<string> WriteReade()
+        public List<string> CommitClient()
         {
             EventWaitHandle eventWriter = EWHCheck.OpenorCreate(false, EventResetMode.AutoReset, "eventWriter");
             EventWaitHandle eventReader = EWHCheck.OpenOrWait("eventReader");
@@ -50,12 +50,9 @@ namespace Commons
                 {
                     List<string> overview = (List<string>)reader.Deserialize(file);
                      return overview;
-                }
-
-                
-            
+                }            
         }
-        public void ReadWrite()
+        public void CommitServer()
         {
             EventWaitHandle eventReader = EWHCheck.OpenorCreate(false, EventResetMode.AutoReset, "eventReader");
             EventWaitHandle eventRW = EWHCheck.OpenorCreate(false, EventResetMode.AutoReset, "eventRW");
@@ -75,8 +72,7 @@ namespace Commons
                     writer.Serialize(wfile, str);
                 }
                 eventRW.Set();
-                eventReader.Set();
-            
+                eventReader.Set();            
         }
     }
 }

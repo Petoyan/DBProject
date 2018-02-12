@@ -14,10 +14,10 @@ namespace Client
         static void Main(string[] args)
         {
 
-            IWriteRead writeRead = new WriteRead(@"C:\Users\User\Desktop\Baza\Message.txt", @"C:\Users\User\Desktop\Baza\Message1.txt");
+            ICommit commitClient = new Commit(@"C:\Users\User\Desktop\Baza\Message.txt", @"C:\Users\User\Desktop\Baza\Message1.txt");
             while (true)
             {
-                foreach (var item in writeRead.WriteReade())
+                foreach (var item in commitClient.CommitClient())
                 {
                     Console.WriteLine(item);
                 } 

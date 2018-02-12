@@ -15,11 +15,11 @@ namespace Server
 
         static void Main(string[] args)
         {            
-            WriteRead c = new WriteRead(@"C:\Users\User\Desktop\Baza\Message1.txt", @"C:\Users\User\Desktop\Baza\Message.txt");
-            Operations op = new Operations(c);
+            Commit commitServer = new Commit(@"C:\Users\User\Desktop\Baza\Message1.txt", @"C:\Users\User\Desktop\Baza\Message.txt");
+            Operations op = new Operations(commitServer);
             while (true)
             {
-                c.ReadWrite();
+                commitServer.CommitServer();
             }
            
         }
